@@ -140,14 +140,14 @@ def public_site():
     }
 
 # ---------- Routes d'authentification ----------
-@app.post("/auth/login", response_model=TokenResponse)
+@app.post("/api/auth/login", response_model=TokenResponse)
 def login(data: LoginRequest):
     if data.email == ADMIN_EMAIL and data.password == ADMIN_PASSWORD:
         token = create_token(data.email)
         return {"access_token": token}
     raise HTTPException(status_code=401, detail="Identifiants invalides")
 
-@app.get("/content")
+@app.get("/api/content")
 def get_content(user: str = Depends(get_current_user)):
     # Pour l'instant, retourner des données par défaut en attendant la DB
     return {
@@ -157,7 +157,7 @@ def get_content(user: str = Depends(get_current_user)):
         "links": []
     }
 
-@app.put("/content")
+@app.put("/api/content")
 def update_content(update: ContentUpdate, user: str = Depends(get_current_user)):
     # Pour l'instant, juste confirmer la mise à jour
     return {"status": "success", "updated": True, "data": update.data}
